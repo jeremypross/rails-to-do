@@ -3,15 +3,22 @@ class UsersController < ApplicationController
   def index
     users = User.all
 
-    render :json => users, status 200
+    render :index
   end
 
   def create
     user = User.create(user_params)
+
+    if user.valid?
+      render :json => user, status: 201
+    else
+      render :json => user.errors, status: 400
+    end
   end
 
   def update
     user_updated = User.find(params[:id]).update_attributes(user_params)
+
     if user_updated
       head 200
     else
